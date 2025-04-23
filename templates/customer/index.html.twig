@@ -3,44 +3,42 @@
 {% block title %}Customers List{% endblock %}
 
 {% block body %}
-	<div class="example-wrapper py-8 bg-red-600">
-        <div class="container mx-auto px-4">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 shadow-lg rounded-lg overflow-hidden">
-                    <thead class="bg-gray-50">
+<div class="flex flex-col flex-1">
+    <div class="container mx-auto px-4 flex-1 items-center justify-center">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 shadow-lg rounded-lg overflow-hidden">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver License</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CIN</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for customer in customers %}
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Full Name
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Driver License
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                CIN
-                            </th>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ customer.fullName }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ customer.driverLicense }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ customer.cin }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
+                                <a href="{{ path('app_customer_view', {id: customer.id}) }}"
+                                   class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">View</a>
+                                <a href="{{ path('app_customer_edit', {id: customer.id}) }}"
+                                   class="inline-block bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">Edit</a>
+                                <a href="{{ path('app_customer_delete', {id: customer.id}) }}"
+                                   onclick="return confirm('Are you sure you want to delete this customer?');"
+                                   class="inline-block bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        {% for customer in customers %}
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ customer.fullName }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ customer.driverLicense }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ customer.cin }}
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td class="px-6 py-4 text-center" colspan="3">No customers found.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% else %}
+                        <tr>
+                            <td class="px-6 py-4 text-center" colspan="4">No customers found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-	</div>
+    </div>
+</div>
 {% endblock %}

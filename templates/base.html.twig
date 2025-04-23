@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full">
 	<head>
 		<meta charset="UTF-8">
 		<title>
@@ -7,32 +7,35 @@
 			{% endblock %}
 		</title>
 		{% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
-
 		{% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
 			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
-	<body>
+	<body
+		class="flex flex-col h-full">
 		<!-- Header Section -->
 		<header>
-			<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 bg-black">
+			<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				<h1 class="text-3xl font-bold underline">
-					{% block header %}Welcome to Rent a car{% endblock %}
+					{% block header %}Welcome to Rent a car
+					{% endblock %}
 				</h1>
 			</div>
 		</header>
-		{% block body %}{% endblock %}
-		<!-- Footer Section -->
-		<footer class="bg-white shadow mt-12">
-			<div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-				<p class="text-center text-gray-500 text-sm">
-					© 2025 YourSite. All rights reserved.
-				</p>
-			</div>
-		</footer>
-	</body>
-</html>
+
+		<!-- Main: will now grow to fill the rest -->
+		<main class="flex-1 flex flex-col"> {% block body %}{% endblock %}
+			</main>
+
+			<!-- Footer Section -->
+			<footer class="bg-white shadow mt-12">
+				<div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+					<p class="text-center text-gray-500 text-sm">
+						© 2025 YourSite. All rights reserved.
+					</p>
+				</div>
+			</footer>
+		</body>
+	</html>
