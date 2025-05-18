@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View Car{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-4">Car Details</h1>
+    <dl class="grid grid-cols-1 gap-4 bg-white shadow rounded-lg p-6">
+        <div>
+            <dt class="font-medium text-gray-700">Brand</dt>
+            <dd class="mt-1 text-gray-900">{{ car.brand }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Model</dt>
+            <dd class="mt-1 text-gray-900">{{ car.model }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Year</dt>
+            <dd class="mt-1 text-gray-900">{{ car.year }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">License Plate</dt>
+            <dd class="mt-1 text-gray-900">{{ car.carLicense }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Available</dt>
+            <dd class="mt-1 text-gray-900">{{ car.available ? 'Yes' : 'No' }}</dd>
+        </div>
+    </dl>
+    <div class="mt-6">
+        <a href="{{ path('app_car_all') }}"
+           class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+           Back to list
+        </a>
+    </div>
+</div>
+{% endblock %}

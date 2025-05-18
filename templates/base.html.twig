@@ -11,6 +11,9 @@
   </head>
 
   <body class="h-full flex">
+    {# Determine current route for active link highlighting #}
+    {% set current_route = app.request.attributes.get('_route') %}
+
     <!-- Sidebar Navigation -->
     <aside class="w-64 bg-gray-500 text-white flex flex-col">
       <div class="px-6 py-4 text-2xl font-bold border-b border-gray-300">
@@ -18,13 +21,26 @@
       </div>
       <nav class="flex-1 px-4 py-6 space-y-2">
         <a href="{{ path('app_customer_all') }}"
-           class="block px-4 py-2 rounded hover:bg-gray-600 hover:text-white text-gray-500 bg-white">Customers</a>
+           class="block px-4 py-2 rounded mb-4
+             {{ current_route == 'app_customer_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
+          Customers
+        </a>
         <a href="{{ path('app_car_all') }}"
-           class="block px-4 py-2 rounded hover:bg-gray-600">Cars</a>
-        <a href="{{ path('app_rental_all') }}"
-           class="block px-4 py-2 rounded hover:bg-gray-600">Rentals</a>
+           class="block px-4 py-2 rounded mb-4 
+             {{ current_route == 'app_car_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
+          Cars
+        </a>
+        {# Uncomment when rentals route available #}
+        {# <a href="{{ path('app_rental_all') }}"
+           class="block px-4 py-2 rounded 
+             {{ current_route == 'app_rental_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
+          Rentals
+        </a> #}
         <a href="{{ path('app_payment_all') }}"
-           class="block px-4 py-2 rounded hover:bg-gray-600">Payments</a>
+           class="block px-4 py-2 rounded mb-4
+             {{ current_route == 'app_payment_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
+          Payments
+        </a>
       </nav>
     </aside>
 
