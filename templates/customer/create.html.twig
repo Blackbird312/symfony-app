@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Customer{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-6">
+    {{ form_start(form, {"attr": {"class": "bg-white shadow rounded-lg p-6 space-y-6"}}) }}
+    <h1 class="text-3xl font-bold">Edit Customer</h1>
+
+    {{ form_row(form.fullName) }}
+    {{ form_row(form.driverLicense) }}
+    {{ form_row(form.cin) }}
+
+    <div class="flex items-center space-x-2">
+        {{ form_row(form.save) }}
+        <a href="{{ path('app_customer_all') }}"
+           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+           Cancel
+        </a>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

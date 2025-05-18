@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
+use App\Form\CustomerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,28 +42,23 @@ final class CustomerController extends AbstractController
         ]);
     }
 
-    #[Route('/customer/edit/{id}', name: 'app_customer_edit', methods: ['GET','POST'])]
-    public function edit(Request $request, int $id): Response
+      #[Route('/customer/edit/{id}', name: 'app_customer_edit', methods: ['GET','POST'])]
+    public function edit(Request $request, Customer $customer): Response
     {
-        $customer = $this->entityManager
-            ->getRepository(Customer::class)
-            ->find($id);
+        // build form, pre-filled with $customer
+        $form = $this->createForm(CustomerType::class, $customer);
 
-        if (!$customer) {
-            throw $this->createNotFoundException('Customer not found');
-        }
-
-        if ($request->isMethod('POST')) {
-            $customer->setFullName($request->request->get('fullName'));
-            $customer->setDriverLicense($request->request->get('driverLicense'));
-            $customer->setCin($request->request->get('cin'));
-
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // no need to persist—entity is managed
             $this->entityManager->flush();
 
+            $this->addFlash('success', 'Customer updated successfully.');
             return $this->redirectToRoute('app_customer_all');
         }
 
         return $this->render('customer/edit.html.twig', [
+            'form'     => $form->createView(),
             'customer' => $customer,
         ]);
     }
@@ -82,5 +78,24 @@ final class CustomerController extends AbstractController
         $this->entityManager->flush();
 
         return $this->redirectToRoute('app_customer_all');
+    }
+
+     #[Route('/customer/create', name: 'app_customer_create', methods: ['GET','POST'])]
+    public function new(Request $request): Response
+    {
+        $customer = new Customer();
+        $form = $this->createForm(CustomerType::class, $customer);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->persist($customer);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_customer_all');
+        }
+
+        return $this->render('customer/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
