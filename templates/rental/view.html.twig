@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View Rental{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-4">Rental Details</h1>
+    <dl class="grid grid-cols-1 gap-4 bg-white shadow rounded-lg p-6">
+        <div>
+            <dt class="font-medium text-gray-700">Start Date</dt>
+            <dd class="mt-1 text-gray-900">{{ rental.startDate|date('Y-m-d H:i') }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">End Date</dt>
+            <dd class="mt-1 text-gray-900">{{ rental.endDate|date('Y-m-d H:i') }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Cost</dt>
+            <dd class="mt-1 text-gray-900">{{ rental.cost|number_format(2, '.', ',') }} MAD</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Customer</dt>
+            <dd class="mt-1 text-gray-900">{{ rental.customer.fullName }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Car</dt>
+            <dd class="mt-1 text-gray-900">
+                {% if rental.car %}
+                    {{ rental.car.brand }} {{ rental.car.model }} ({{ rental.car.year }})<br>
+                    Plate: {{ rental.car.carLicense }}
+                {% else %}
+                    —  
+                {% endif %}
+            </dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Payment Amount</dt>
+            <dd class="mt-1 text-gray-900">
+                {{ rental.payment.amount|number_format(2, '.', ',') }} MAD 
+                {% if rental.payment.amount < rental.cost %}
+                <span class="text-white bg-red-300 px-2 py-1 rounded" >
+                    remaining : {{ rental.cost - rental.payment.amount|number_format(2, '.', ',') }} MAD
+                </span>
+                {% endif %}
+            </dd>
+        </div>
+        <div>
+            <dt class="font-medium text-gray-700">Payment Date</dt>
+            <dd class="mt-1 text-gray-900">
+                {{ rental.payment.paymentDate|date('Y-m-d H:i') }}
+            </dd>
+        </div>
+    </dl>
+    <div class="mt-6">
+        <a href="{{ path('app_rental_all') }}"
+           class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+           Back to list
+        </a>
+    </div>
+</div>
+{% endblock %}

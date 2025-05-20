@@ -15,7 +15,7 @@
     {% set current_route = app.request.attributes.get('_route') %}
 
     <!-- Sidebar Navigation -->
-    <aside class="w-64 bg-gray-500 text-white flex flex-col">
+    <aside class=" bg-gray-500 text-white flex flex-col min-h-dvh">
       <div class="px-6 py-4 text-2xl font-bold border-b border-gray-300">
         Rent a Car logo
       </div>
@@ -30,16 +30,10 @@
              {{ current_route == 'app_car_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
           Cars
         </a>
-        {# Uncomment when rentals route available #}
-        {# <a href="{{ path('app_rental_all') }}"
-           class="block px-4 py-2 rounded 
+        <a href="{{ path('app_rental_all') }}"
+           class="block px-4 py-2 rounded mb-4 
              {{ current_route == 'app_rental_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
           Rentals
-        </a> #}
-        <a href="{{ path('app_payment_all') }}"
-           class="block px-4 py-2 rounded mb-4
-             {{ current_route == 'app_payment_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
-          Payments
         </a>
       </nav>
     </aside>

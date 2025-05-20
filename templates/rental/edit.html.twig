@@ -1,0 +1,60 @@
+{# templates/rental/edit.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Rental{% endblock %}
+
+{% block body %}
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">Edit Rental</h1>
+
+    {{ form_start(form, { attr: { class: 'bg-white shadow rounded-lg p-6 space-y-6 grid grid-cols-2 gap-4' } }) }}
+
+      <div>
+        {{ form_label(form.startDate, 'Start Date') }}
+        {{ form_widget(form.startDate) }}
+        {{ form_errors(form.startDate) }}
+      </div>
+
+      <div>
+        {{ form_label(form.endDate, 'End Date') }}
+        {{ form_widget(form.endDate) }}
+        {{ form_errors(form.endDate) }}
+      </div>
+
+      <div>
+        {{ form_label(form.cost, 'Cost') }}
+        {{ form_widget(form.cost) }}
+        {{ form_errors(form.cost) }}
+      </div>
+
+      <div>
+        {{ form_label(form.customer, 'Customer') }}
+        {{ form_widget(form.customer) }}
+        {{ form_errors(form.customer) }}
+      </div>
+
+      <div>
+        {{ form_label(form.car, 'Car (optional)') }}
+        {{ form_widget(form.car) }}
+        {{ form_errors(form.car) }}
+      </div>
+
+      <div>
+        {{ form_label(form.paymentAmount, 'Payment Amount') }}
+        {{ form_widget(form.paymentAmount) }}
+        {{ form_errors(form.paymentAmount) }}
+      </div>
+
+      <div>
+        {{ form_label(form.paymentDate, 'Payment Date') }}
+        {{ form_widget(form.paymentDate) }}
+        {{ form_errors(form.paymentDate) }}
+      </div>
+
+      <div class="text-center">
+        {{ form_widget(form.save) }}
+      </div>
+
+    {{ form_end(form) }}
+  </div>
+{% endblock %}

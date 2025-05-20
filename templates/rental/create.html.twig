@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Rental{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-3xl mb-4">Create Rental</h1>
+    {{ form_start(form, {
+        attr: { class: 'bg-white shadow rounded-lg p-6 space-y-6' },
+        action: path('app_rental_create')
+    }) }}
+
+    {{ form_row(form.startDate) }}
+    {{ form_row(form.endDate) }}
+    {{ form_row(form.cost) }}
+    {{ form_row(form.customer) }}
+    {{ form_row(form.car) }}
+
+    {# the two new, unmapped payment fields #}
+    {{ form_row(form.paymentAmount) }}
+    {{ form_row(form.paymentDate) }}
+
+    <div class="flex items-center space-x-2">
+        {{ form_row(form.save) }}
+        <a href="{{ path('app_rental_all') }}"
+           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+           Cancel
+        </a>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
