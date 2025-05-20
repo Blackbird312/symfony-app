@@ -1,38 +1,37 @@
+{# templates/base.html.twig #}
 <!DOCTYPE html>
 <html class="h-full">
   <head>
     <meta charset="UTF-8">
-    <title>
-      {% block title %}Welcome!{% endblock %}
-    </title>
+    <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('build/app.css') }}" />
     {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
     {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
   </head>
 
   <body class="h-full flex">
-    {# Determine current route for active link highlighting #}
     {% set current_route = app.request.attributes.get('_route') %}
+    {# define “active” flags for each menu group #}
+    {% set customers_active = current_route starts with 'app_customer_' %}
+    {% set cars_active      = current_route starts with 'app_car_'      %}
+    {% set rentals_active   = current_route starts with 'app_rental_'   %}
 
     <!-- Sidebar Navigation -->
-    <aside class=" bg-gray-500 text-white flex flex-col min-h-dvh">
+    <aside class="bg-gray-500 text-white flex flex-col min-h-dvh">
       <div class="px-6 py-4 text-2xl font-bold border-b border-gray-300">
-        Rent a Car logo
+        <img src="{{ asset('uploads/logo.png') }}" width="150" alt="logo">
       </div>
       <nav class="flex-1 px-4 py-6 space-y-2">
         <a href="{{ path('app_customer_all') }}"
-           class="block px-4 py-2 rounded mb-4
-             {{ current_route == 'app_customer_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
+           class="block px-4 py-2 rounded mb-4 {{ customers_active ? 'border bg-white text-gray-500' : 'bg-gray-500 text-white' }}">
           Customers
         </a>
         <a href="{{ path('app_car_all') }}"
-           class="block px-4 py-2 rounded mb-4 
-             {{ current_route == 'app_car_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
+           class="block px-4 py-2 rounded mb-4 {{ cars_active ? 'border bg-white text-gray-500' : 'bg-gray-500 text-white' }}">
           Cars
         </a>
         <a href="{{ path('app_rental_all') }}"
-           class="block px-4 py-2 rounded mb-4 
-             {{ current_route == 'app_rental_all' ? "border bg-white text-gray-500" : "bg-gray-500 text-white"}}">
+           class="block px-4 py-2 rounded mb-4 {{ rentals_active ? 'border bg-white text-gray-500' : 'bg-gray-500 text-white' }}">
           Rentals
         </a>
       </nav>
@@ -55,7 +54,7 @@
       <!-- Footer -->
       <footer class="bg-white shadow mt-auto">
         <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-          <p class="text-center text-gray-500 text-sm">© 2025 YourSite. All rights reserved.</p>
+          <p class="text-center text-gray-500 text-sm">© 2025 Mohammed EL MIMOUNI - CISI4GC - Supmti Oujda. All rights reserved.</p>
         </div>
       </footer>
     </div>

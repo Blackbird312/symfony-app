@@ -37,7 +37,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-center space-x-2">
                                 <a href="{{ path('app_car_view',  { id: car.id }) }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">View</a>
                                 <a href="{{ path('app_car_edit',  { id: car.id }) }}" class="inline-block bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">Edit</a>
-                                <a href="{{ path('app_car_delete',{ id: car.id }) }}" onclick="return confirm('Are you sure you want to delete this car?');" class="inline-block bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</a>
+                                {# <a href="{{ path('app_car_delete',{ id: car.id }) }}" onclick="return confirm('Are you sure you want to delete this car?');" class="inline-block bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</a> #}
                             </td>
                         </tr>
                     {% else %}

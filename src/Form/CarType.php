@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;            // ← add this
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -41,6 +42,16 @@ class CarType extends AbstractType
                     'class' => 'h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded'
                 ],
             ])
+
+            // --- NEW UPLOAD FIELD ---
+            ->add('images', FileType::class, [
+                'label'        => 'Car Images (JPEG/PNG)',
+                'mapped'       => false,      // not associated directly to the Car entity
+                'required'     => false,
+                'multiple'     => true,       // allow multiple uploads
+                'attr'         => ['class' => $fieldClass],
+            ])
+
             ->add('save', SubmitType::class, [
                 'label' => 'Save Changes',
                 'attr'  => [

@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Car;
+use App\Entity\CarImage;
 use App\Form\CarType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;               // ← add
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class CarController extends AbstractController
@@ -47,9 +50,25 @@ final class CarController extends AbstractController
     {
         $car  = new Car();
         $form = $this->createForm(CarType::class, $car);
-
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // 1) Handle uploaded images
+            /** @var UploadedFile[] $imageFiles */
+            $imageFiles = $form->get('images')->getData();
+
+            foreach ($imageFiles as $file) {
+                $newFilename = uniqid() . '.' . $file->guessExtension();
+                $file->move(
+                    $this->getParameter('car_images_directory'),
+                    $newFilename
+                );
+
+                $carImage = new CarImage();
+                $carImage->setFileName($newFilename);
+                $car->addCarImage($carImage);
+            }
+            // 2) Persist Car (and its new images)
             $this->entityManager->persist($car);
             $this->entityManager->flush();
 
@@ -66,10 +85,26 @@ final class CarController extends AbstractController
     public function edit(Request $request, Car $car): Response
     {
         $form = $this->createForm(CarType::class, $car);
-
         $form->handleRequest($request);
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            // entity is already managed
+            // Handle any newly uploaded images
+            /** @var UploadedFile[] $imageFiles */
+            $imageFiles = $form->get('images')->getData();
+
+            foreach ($imageFiles as $file) {
+                $newFilename = uniqid() . '.' . $file->guessExtension();
+                $file->move(
+                    $this->getParameter('car_images_directory'),
+                    $newFilename
+                );
+
+                $carImage = new CarImage();
+                $carImage->setFileName($newFilename);
+                $car->addCarImage($carImage);
+            }
+
+            // Save changes
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Car updated successfully.');
@@ -98,5 +133,31 @@ final class CarController extends AbstractController
 
         $this->addFlash('success', 'Car deleted successfully.');
         return $this->redirectToRoute('app_car_all');
+    }
+
+    #[Route('/car/image/delete/{id}', name: 'app_car_image_delete', methods: ['POST'])]
+    public function deleteImage(Request $request, CarImage $image): RedirectResponse
+    {
+        $car = $image->getCar();
+
+        // CSRF check
+        $submittedToken = $request->request->get('_token');
+        if (! $this->isCsrfTokenValid('delete-image'.$image->getId(), $submittedToken)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token');
+        }
+
+        // remove the file from disk (optional but recommended)
+        $filename = $image->getFileName();
+        $uploadDir = $this->getParameter('car_images_directory');
+        @unlink($uploadDir.'/'.$filename);
+
+        // remove from database
+        $this->entityManager->remove($image);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'Image deleted.');
+
+        // redirect back to the same car view
+        return $this->redirectToRoute('app_car_view', ['id' => $car->getId()]);
     }
 }

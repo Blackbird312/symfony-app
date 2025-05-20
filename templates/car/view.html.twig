@@ -1,37 +1,72 @@
+{# templates/car/view.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}View Car{% endblock %}
+{% block title %}View Car
+{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-4">Car Details</h1>
-    <dl class="grid grid-cols-1 gap-4 bg-white shadow rounded-lg p-6">
-        <div>
-            <dt class="font-medium text-gray-700">Brand</dt>
-            <dd class="mt-1 text-gray-900">{{ car.brand }}</dd>
-        </div>
-        <div>
-            <dt class="font-medium text-gray-700">Model</dt>
-            <dd class="mt-1 text-gray-900">{{ car.model }}</dd>
-        </div>
-        <div>
-            <dt class="font-medium text-gray-700">Year</dt>
-            <dd class="mt-1 text-gray-900">{{ car.year }}</dd>
-        </div>
-        <div>
-            <dt class="font-medium text-gray-700">License Plate</dt>
-            <dd class="mt-1 text-gray-900">{{ car.carLicense }}</dd>
-        </div>
-        <div>
-            <dt class="font-medium text-gray-700">Available</dt>
-            <dd class="mt-1 text-gray-900">{{ car.available ? 'Yes' : 'No' }}</dd>
-        </div>
-    </dl>
-    <div class="mt-6">
-        <a href="{{ path('app_car_all') }}"
-           class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
-           Back to list
-        </a>
-    </div>
-</div>
+	<div class="container mx-auto px-4 py-6">
+		<h1 class="text-2xl font-bold mb-4">Car Details</h1>
+
+		<dl class="grid grid-cols-1 gap-4 bg-white shadow rounded-lg p-6">
+			<div>
+				<dt class="font-medium text-gray-700">Brand</dt>
+				<dd class="mt-1 text-gray-900">{{ car.brand }}</dd>
+			</div>
+			<div>
+				<dt class="font-medium text-gray-700">Model</dt>
+				<dd class="mt-1 text-gray-900">{{ car.model }}</dd>
+			</div>
+			<div>
+				<dt class="font-medium text-gray-700">Year</dt>
+				<dd class="mt-1 text-gray-900">{{ car.year }}</dd>
+			</div>
+			<div>
+				<dt class="font-medium text-gray-700">License</dt>
+				<dd class="mt-1 text-gray-900">{{ car.carLicense }}</dd>
+			</div>
+			<div>
+				<dt class="font-medium text-gray-700">Available</dt>
+				<dd class="mt-1 text-gray-900">
+					{{ car.available ? 'Yes' : 'No' }}
+				</dd>
+			</div>
+
+			{# ← this is the new block for images #}
+			<div>
+				<dt class="font-medium text-gray-700">Images</dt>
+				<dd class="mt-1">
+					{% if car.carImages|length > 0 %}
+						<div class="flex flex-wrap gap-4">
+							{% for image in car.carImages %}
+								<div class="relative flex flex-col gap-4">
+									<form method="post" action="{{ path('app_car_image_delete', { id: image.id }) }}" class="absolute top-2 right-2" onsubmit="return confirm('Really delete this image?');">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete-image' ~ image.id) }}">
+										<button type="submit" >
+											<span class=" text-red-500 cursor-pointer font-bold text-3xl">X</span>
+										</button>
+									</form>
+									<img
+									src="{{ asset('uploads/cars/' ~ image.fileName) }}" alt="Image of {{ car.brand }} {{ car.model }}" class="h-60 object-cover rounded-lg shadow">
+								{# delete form #}
+
+								</div>
+							{% endfor %}
+						</div>
+					{% else %}
+						<p class="text-gray-500">No images uploaded for this car.</p>
+					{% endif %}
+				</dd>
+			</div>
+		</dl>
+
+		<div class="mt-6 flex space-x-2">
+			<a href="{{ path('app_car_edit', { id: car.id }) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+				Edit
+			</a>
+			<a href="{{ path('app_car_all') }}" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+				Back to list
+			</a>
+		</div>
+	</div>
 {% endblock %}

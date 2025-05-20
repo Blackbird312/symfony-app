@@ -16,20 +16,32 @@
         </div>
         <div>
             <dt class="font-medium text-gray-700">Cost</dt>
-            <dd class="mt-1 text-gray-900">{{ rental.cost|number_format(2, '.', ',') }} MAD</dd>
+            <dd class="mt-1 text-green-500 ">{{ rental.cost|number_format(2, '.', ',') }} MAD</dd>
         </div>
         <div>
             <dt class="font-medium text-gray-700">Customer</dt>
-            <dd class="mt-1 text-gray-900">{{ rental.customer.fullName }}</dd>
+            <dd class="mt-1 text-gray-900">
+                {% if rental.customer %}
+                    <a href="{{ path('app_customer_view', { id: rental.customer.id }) }}"
+                       class="underline text-white bg-blue-500 px-2 py-1">
+                        {{ rental.customer.fullName }}
+                    </a>
+                {% else %}
+                    —
+                {% endif %}
+            </dd>
         </div>
         <div>
             <dt class="font-medium text-gray-700">Car</dt>
             <dd class="mt-1 text-gray-900">
                 {% if rental.car %}
-                    {{ rental.car.brand }} {{ rental.car.model }} ({{ rental.car.year }})<br>
+                    <a href="{{ path('app_car_view', { id: rental.car.id }) }}"
+                       class="underline text-white bg-green-500 px-2 py-1">
+                        {{ rental.car.brand }} {{ rental.car.model }} ({{ rental.car.year }})
+                    </a><br>
                     Plate: {{ rental.car.carLicense }}
                 {% else %}
-                    —  
+                    —
                 {% endif %}
             </dd>
         </div>
@@ -38,9 +50,9 @@
             <dd class="mt-1 text-gray-900">
                 {{ rental.payment.amount|number_format(2, '.', ',') }} MAD 
                 {% if rental.payment.amount < rental.cost %}
-                <span class="text-white bg-red-300 px-2 py-1 rounded" >
-                    remaining : {{ rental.cost - rental.payment.amount|number_format(2, '.', ',') }} MAD
-                </span>
+                    <span class="text-white bg-red-300 px-2 py-1 rounded">
+                        remaining: {{ (rental.cost - rental.payment.amount)|number_format(2, '.', ',') }} MAD
+                    </span>
                 {% endif %}
             </dd>
         </div>

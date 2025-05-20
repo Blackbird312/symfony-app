@@ -36,9 +36,21 @@ class Car
     #[ORM\OneToMany(targetEntity: Rental::class, mappedBy: 'car')]
     private Collection $rentals;
 
+    /**
+     * @var Collection<int, CarImage>
+     */
+    #[ORM\OneToMany(
+        targetEntity: CarImage::class, 
+        mappedBy: 'Car', 
+        cascade: ['persist', 'remove'], 
+        orphanRemoval: true
+    )]
+    private Collection $carImages;
+
     public function __construct()
     {
         $this->rentals = new ArrayCollection();
+        $this->carImages = new ArrayCollection();
     }
 
 
@@ -131,6 +143,36 @@ class Car
             // set the owning side to null (unless already changed)
             if ($rental->getCar() === $this) {
                 $rental->setCar(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CarImage>
+     */
+    public function getCarImages(): Collection
+    {
+        return $this->carImages;
+    }
+
+    public function addCarImage(CarImage $carImage): static
+    {
+        if (!$this->carImages->contains($carImage)) {
+            $this->carImages->add($carImage);
+            $carImage->setCar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCarImage(CarImage $carImage): static
+    {
+        if ($this->carImages->removeElement($carImage)) {
+            // set the owning side to null (unless already changed)
+            if ($carImage->getCar() === $this) {
+                $carImage->setCar(null);
             }
         }
 

@@ -1,17 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Car{% endblock %}
+{% block title %}Create Car{% endblock %}
 
 {% block body %}
 <div class="container mx-auto px-4 py-6">
-    {{ form_start(form, { attr: { class: 'bg-white shadow rounded-lg p-6 space-y-6' } }) }}
-    <h1 class="text-3xl font-bold">Edit Car</h1>
+    {{ form_start(form, { attr: { class: 'bg-white shadow rounded-lg p-6 space-y-6'},'multipart': true}) }}
+    <h1 class="text-3xl font-bold">Create Car</h1>
 
     {{ form_row(form.brand) }}
     {{ form_row(form.model) }}
     {{ form_row(form.year) }}
     {{ form_row(form.carLicense) }}
     {{ form_row(form.available) }}
+
+    {# new file-upload field #}
+    {{ form_row(form.images) }}
 
     <div class="flex items-center space-x-2">
         {{ form_row(form.save) }}

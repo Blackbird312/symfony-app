@@ -91,7 +91,7 @@ class RentalType extends AbstractType
         //
         $builder
             ->add('paymentAmount', MoneyType::class, [
-                'currency' => 'USD',
+                'currency' => 'MAD',
                 'label'    => 'Payment Amount',
                 'mapped'   => false,
                 'attr'     => ['class' => $fieldClass],
