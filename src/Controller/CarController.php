@@ -45,12 +45,12 @@ final class CarController extends AbstractController
         ]);
     }
 
-    #[Route('/car/create', name: 'app_car_create', methods: ['GET','POST'])]
+    #[Route('/car/create', name: 'app_car_create', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $car  = new Car();
         $form = $this->createForm(CarType::class, $car);
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // 1) Handle uploaded images
@@ -81,12 +81,12 @@ final class CarController extends AbstractController
         ]);
     }
 
-    #[Route('/car/edit/{id}', name: 'app_car_edit', methods: ['GET','POST'])]
+    #[Route('/car/edit/{id}', name: 'app_car_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Car $car): Response
     {
         $form = $this->createForm(CarType::class, $car);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             // Handle any newly uploaded images
             /** @var UploadedFile[] $imageFiles */
@@ -128,10 +128,14 @@ final class CarController extends AbstractController
             throw $this->createNotFoundException('Car not found');
         }
 
-        $this->entityManager->remove($car);
-        $this->entityManager->flush();
+        if ($car->getRentals()->count() > 0) {
+            $this->addFlash('warning', 'Cannot delete this car because it has active rentals.');
+        } else {
+            $this->entityManager->remove($car);
+            $this->entityManager->flush();
 
-        $this->addFlash('success', 'Car deleted successfully.');
+            $this->addFlash('success', 'Car deleted successfully.');
+        }
         return $this->redirectToRoute('app_car_all');
     }
 
@@ -142,14 +146,14 @@ final class CarController extends AbstractController
 
         // CSRF check
         $submittedToken = $request->request->get('_token');
-        if (! $this->isCsrfTokenValid('delete-image'.$image->getId(), $submittedToken)) {
+        if (! $this->isCsrfTokenValid('delete-image' . $image->getId(), $submittedToken)) {
             throw $this->createAccessDeniedException('Invalid CSRF token');
         }
 
-        // remove the file from disk (optional but recommended)
+        // remove the file from disk
         $filename = $image->getFileName();
         $uploadDir = $this->getParameter('car_images_directory');
-        @unlink($uploadDir.'/'.$filename);
+        @unlink($uploadDir . '/' . $filename);
 
         // remove from database
         $this->entityManager->remove($image);
